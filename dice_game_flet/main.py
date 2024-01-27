@@ -137,8 +137,9 @@ def main(page: ft.Page):  # noqa
     reset_displayed_colors()
     for i, square in enumerate(game.upper_boxes):
       number, color = generate_number_and_color(i)
-      square.controls[0].content.content.content.value = number
-      square.controls[0].content.content.content.color = color
+      box = ty.cast(Box, square.controls[0])
+      box.text.value = number
+      box.text.color = color
 
     for square in game.lower_boxes:
       square.controls[1].content.content.content.value = ''
@@ -149,13 +150,13 @@ def main(page: ft.Page):  # noqa
   def next_round(e: ft.ControlEvent) -> None:
     game.initial_dice += 1
     if game.initial_dice <= game.num_dados:
-      for box in game.upper_boxes:
-        if box.controls[0].content.content.content.value == '':
-          box.controls[0].content.content.content.value = str(
-              random.randint(1, 10))
+      for square in game.upper_boxes:
+        box = ty.cast(Box, square.controls[0])
+        if box.value == '':
+          box.text.value = str(random.randint(1, 10))
           color = game.displayed_colors.pop(
               random.randint(0, len(game.displayed_colors) - 1))
-          box.controls[0].content.content.content.color = color
+          box.text.color = color
           break
       get_remaining_num_color()
       page.update()
@@ -179,10 +180,10 @@ def main(page: ft.Page):  # noqa
     page.update()
 
   def throw_dice_again(e: ft.ControlEvent) -> None:
-    for box in game.upper_boxes:
-      if box.controls[0].content.content.content.value != '':
-        box.controls[0].content.content.content.value = str(
-            random.randint(1, 10))
+    for square in game.upper_boxes:
+      box = ty.cast(Box, square.controls[0])
+      if box.value != '':
+        box.text.value = str(random.randint(1, 10))
     page.update()
 
   def get_remaining_num_color() -> None:
