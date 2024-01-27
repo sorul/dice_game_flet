@@ -12,4 +12,5 @@ class Color(str, Enum):
   YELLOW = ft.colors.YELLOW_300
 
   def __str__(self):
+    """Return the string representation of the color."""
     return self.value
